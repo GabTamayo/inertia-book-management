@@ -1,15 +1,15 @@
 <template>
     <div class="flex justify-between space-x-4 space-y-4">
         <div class="grow place-items-center">
-            <ul class="menu menu-md bg-base-200 rounded-box w-48">
-                <li class="menu-title">Fiction</li>
-                <li><a>Item 1</a></li>
-                <li><a>Item 2</a></li>
-                <li><a>Item 3</a></li>
-                <li class="menu-title">Non-Fiction</li>
-                <li><a>Item 1</a></li>
-                <li><a>Item 2</a></li>
-                <li><a>Item 3</a></li>
+            <ul class="menu bg-base-200 rounded-box w-48">
+                <li class="menu-title text-2xl">Fiction</li>
+                <template v-for="genre in genres['Fiction']" :key="genre.id">
+                    <li><a>{{ genre.genre }}</a></li>
+                </template>
+                <li class="menu-title text-2xl">Non-Fiction</li>
+                <template v-for="genre in genres['Non-Fiction']" :key="genre.id">
+                    <li><a>{{ genre.genre }}</a></li>
+                </template>
             </ul>
         </div>
 
@@ -68,5 +68,9 @@
 </template>
 
 <script setup>
+
+defineProps({
+    genres: Object,
+})
 
 </script>
