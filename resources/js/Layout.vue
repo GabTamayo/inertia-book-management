@@ -1,9 +1,9 @@
 <template>
     <main>
         <header class="bg-base-100 shadow-sm">
-            <div class="navbar max-w-7xl mx-auto px-2">
+            <div class="navbar max-w-7xl mx-auto">
                 <div class="navbar-start">
-                    <a class="btn btn-ghost text-xl font-bold">📖bookMNGR</a>
+                    <a href="/" class="btn btn-ghost text-xl font-bold">📖bookMNGR</a>
                 </div>
 
                 <div class="navbar-center">
@@ -11,12 +11,12 @@
                 </div>
 
                 <div class="navbar-end">
-                    <button class="btn btn-primary">Add A book</button>
+                    <button class="btn btn-primary rounded-full px-6">Add A book</button>
                 </div>
             </div>
         </header>
 
-        <article class="max-w-7xl mx-auto w-full px-6 py-10">
+        <article class="max-w-7xl mx-auto w-full py-10 px-6">
             <slot />
         </article>
     </main>

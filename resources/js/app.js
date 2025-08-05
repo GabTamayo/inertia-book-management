@@ -4,6 +4,15 @@ import '../css/app.css';
 import Layout from './Layout.vue';
 
 createInertiaApp({
+    progress: {
+        delay: 250,
+
+        color: '#29d',
+
+        includeCSS: true,
+
+        showSpinner: false,
+    },
     resolve: name => {
         const pages = import.meta.glob('./Pages/**/*.vue', { eager: true })
         let page = pages[`./Pages/${name}.vue`]
