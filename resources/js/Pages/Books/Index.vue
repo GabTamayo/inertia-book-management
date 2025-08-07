@@ -1,11 +1,13 @@
 <template>
     <div class="flex justify-between space-x-4 space-y-4">
+        <!--  Left Bar -->
         <div class="grow place-items-center">
             <ul class="menu bg-base-200 rounded-box w-48">
                 <li class="menu-title text-2xl">Fiction</li>
                 <template v-for="genre in genres['Fiction']" :key="genre.id">
                     <li><a>{{ genre.genre }}</a></li>
                 </template>
+
                 <li class="menu-title text-2xl">Non-Fiction</li>
                 <template v-for="genre in genres['Non-Fiction']" :key="genre.id">
                     <li><a>{{ genre.genre }}</a></li>
@@ -13,6 +15,7 @@
             </ul>
         </div>
 
+        <!--  Center Bar -->
         <div class="grow place-items-center w-full">
             <ul class="list bg-base-200 rounded-box w-full">
                 <li class="list-row">
@@ -58,6 +61,7 @@
             </ul>
         </div>
 
+        <!--  Right Bar -->
         <div class="grow place-items-center hidden lg:block">
             <div class="w-48">
                 <h1 class="font-medium text-md capitalize">Book Manager For Book Collectors And Enthusiasts</h1>

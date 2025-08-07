@@ -2,11 +2,11 @@
     <div>
         <ul class="menu menu-horizontal md:space-x-4">
             <li>
-                <Link href="/">Dashboard</Link>
+                <Link href="/" :class="{'menu-active': $page.url === '/'}">Dashboard</Link>
             </li>
 
             <li>
-                <Link href="/books">Books</Link>
+                <Link href="/books" :class="{'menu-active': $page.url === '/books'}">Books</Link>
             </li>
 
             <li>

@@ -14,6 +14,8 @@ class GenreSeeder extends Seeder
      */
     public function run(): void
     {
+        Genre::truncate();
+
         Genre::insert([
             ['category' => 'Fiction', 'genre' => 'Fantasy'],
             ['category' => 'Fiction', 'genre' => 'Science Fiction'],

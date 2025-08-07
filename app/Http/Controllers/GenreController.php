@@ -19,7 +19,7 @@ class GenreController extends Controller
                 ]);
             });
 
-        return Inertia::render('Books/Books', [
+        return Inertia::render('Books/Index', [
             'genres' => $grouped_genres,
         ]);
     }
