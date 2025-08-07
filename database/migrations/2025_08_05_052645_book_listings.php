@@ -29,12 +29,14 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Book::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Genre::class)->constrained()->cascadeOnDelete();
+            $table->timestamps();
         });
 
         Schema::create('book_author', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Book::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Author::class)->constrained()->cascadeOnDelete();
+            $table->timestamps();
         });
     }
 

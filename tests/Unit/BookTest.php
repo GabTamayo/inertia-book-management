@@ -5,27 +5,43 @@ use App\Models\Book;
 use App\Models\Genre;
 use Database\Seeders\GenreSeeder;
 
-it('belongs to an author', function () {
+it('can attach an author', function () {
     $author = Author::factory()->create();
     $book = Book::factory()->create();
-    //Act
-    $book->authors()->attach($author->id);
 
+    $book->addAuthors($author->name);
     $book->load('authors');
 
-    //Assert
     expect($book->authors->contains($author))->toBeTrue();
 });
 
-it('belongs to a genre', function () {
-    $this->seed(GenreSeeder::class);
-    $genre = Genre::inRandomOrder()->first();
+it('can attach multiple authors', function () {
+    $authors = Author::factory()->count(3)->create();
     $book = Book::factory()->create();
-    //Act
-    $book->genres()->attach($genre->id);
 
+    $book->addAuthors($authors->pluck('name')->toArray());
+    $book->load('authors');
+
+    expect($book->authors)->toHaveCount(3);
+});
+
+
+it('can attach genre', function () {
+    $this->seed(GenreSeeder::class);
+    $book = Book::factory()->create();
+
+    $book->addGenres('History');
     $book->load('genres');
 
-    //Assert
-    expect($book->genres->contains($genre))->toBeTrue();
+    expect($book->genres)->toHaveCount(1);
+});
+
+it('can attach multiple genres', function () {
+    $this->seed(GenreSeeder::class);
+    $book = Book::factory()->create();
+
+    $book->addGenres(['History', 'Fantasy']);
+    $book->load('genres');
+
+    expect($book->genres)->toHaveCount(2);
 });

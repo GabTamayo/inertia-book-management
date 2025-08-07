@@ -18,7 +18,7 @@ class BookFactory extends Factory
     {
         return [
             'photo' => null,
-            'title' => fake()->title(),
+            'title' => fake()->sentence(3),
             'price' => fake()->randomFloat(2, 50, 1500),
             'format' => fake()->randomElement(['Paperback', 'Hardcover']),
             'date_bought' => fake()->date(),

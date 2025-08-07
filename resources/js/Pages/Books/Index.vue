@@ -1,7 +1,23 @@
 <template>
     <div class="flex justify-between space-x-4 space-y-4">
         <!--  Left Bar -->
-        <div class="grow place-items-center">
+
+        <details class="dropdown md:hidden">
+            <summary class="btn m-1">Genres</summary>
+            <ul class="menu dropdown-content bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+                <li class="menu-title text-xl">Fiction</li>
+                <template v-for="genre in genres['Fiction']" :key="genre.id">
+                    <li><a>{{ genre.genre }}</a></li>
+                </template>
+
+                <li class="menu-title text-xl">Non-Fiction</li>
+                <template v-for="genre in genres['Non-Fiction']" :key="genre.id">
+                    <li><a>{{ genre.genre }}</a></li>
+                </template>
+            </ul>
+        </details>
+
+        <div class="grow place-items-center hidden md:block">
             <ul class="menu bg-base-200 rounded-box w-48">
                 <li class="menu-title text-2xl">Fiction</li>
                 <template v-for="genre in genres['Fiction']" :key="genre.id">
@@ -18,47 +34,34 @@
         <!--  Center Bar -->
         <div class="grow place-items-center w-full">
             <ul class="list bg-base-200 rounded-box w-full">
-                <li class="list-row">
+                <li v-for="book in books.data" :key="book.id" class="list-row">
                     <div>
-                        <img class="size-14 rounded-box" src="https://img.daisyui.com/images/profile/demo/1@94.webp" />
+                        <img class="size-14 rounded-box" src="https://img.daisyui.com/images/profile/demo/1@94.webp"
+                            :alt="`Cover of ${book.title}`" />
                     </div>
                     <div>
-                        <div class="uppercase">The Brothers Karamazov</div>
-                        <div class="text-xs font-semibold opacity-60 mb-1">Fyodor Dostoevsky</div>
+                        <div>
+                            <span class="uppercase">{{ book.title }}</span>
+                            <span class="normal-case"> ({{ book.format }})</span>
+                        </div>
+                        <div class="text-xs font-semibold opacity-60 mb-1">{{book.authors.map(author =>
+                            author.name).join(', ')
+                        }}</div>
+                        <div class="flex flex-wrap gap-2">
+                            <span v-for="genre in book.genres" :key="genre.id"
+                                class="badge badge-soft badge-xs sm:badge-sm">
+                                {{ genre.genre }}
+                            </span>
+                        </div>
                     </div>
                     <div class="align-items-end">
-                        <a href="" class="btn btn-primary">View</a>
+                        <a href="#" class="btn btn-primary">View</a>
                     </div>
                 </li>
-
-                <li class="list-row">
-                    <div>
-                        <img class="size-14 rounded-box" src="https://img.daisyui.com/images/profile/demo/1@94.webp" />
-                    </div>
-                    <div>
-                        <div class="uppercase">The Brothers Karamazov</div>
-                        <div class="text-xs font-semibold opacity-60 mb-1">Fyodor Dostoevsky</div>
-                    </div>
-                    <div class="align-items-end">
-                        <a href="" class="btn btn-primary">View</a>
-                    </div>
-                </li>
-
-                <li class="list-row">
-                    <div>
-                        <img class="size-14 rounded-box" src="https://img.daisyui.com/images/profile/demo/1@94.webp" />
-                    </div>
-                    <div>
-                        <div class="uppercase">The Brothers Karamazov</div>
-                        <div class="text-xs font-semibold opacity-60 mb-1">Fyodor Dostoevsky</div>
-                    </div>
-                    <div class="align-items-end">
-                        <a href="" class="btn btn-primary">View</a>
-                    </div>
-                </li>
-
-
             </ul>
+
+            <Pagination :links="books.links" class="my-4" />
+
         </div>
 
         <!--  Right Bar -->
@@ -72,9 +75,11 @@
 </template>
 
 <script setup>
+import Pagination from '../../Shared/Pagination.vue';
 
 defineProps({
     genres: Object,
+    books: Object,
 })
 
 </script>
