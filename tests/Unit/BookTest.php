@@ -45,3 +45,20 @@ it('can attach multiple genres', function () {
 
     expect($book->genres)->toHaveCount(2);
 });
+
+it('can create book with authors and genres attached', function () {
+    $authors = Author::factory()->count(2)->create();
+    $this->seed(GenreSeeder::class);
+
+    $book = Book::factory()
+        ->afterCreating(function (Book $book) use ($authors) {
+            $book->addAuthors($authors->pluck('name')->toArray());
+            $book->addGenres(['History']);
+        })
+        ->create();
+
+    $book->load(['authors', 'genres']);
+
+    expect($book->authors)->toHaveCount(2);
+    expect($book->genres)->toHaveCount(1);
+});

@@ -3,6 +3,11 @@ import { createInertiaApp, Link } from '@inertiajs/vue3'
 import '../css/app.css';
 import Layout from './Layout.vue';
 
+import { OhVueIcon, addIcons } from "oh-vue-icons";
+import { HiMenu } from "oh-vue-icons/icons";
+
+addIcons(HiMenu);
+
 createInertiaApp({
     progress: {
         delay: 250,
@@ -23,6 +28,7 @@ createInertiaApp({
         createApp({ render: () => h(App, props) })
             .use(plugin)
             .component("Link", Link)
+            .component('v-icon', OhVueIcon)
             .mount(el)
     },
 })

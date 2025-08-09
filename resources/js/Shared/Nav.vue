@@ -6,7 +6,7 @@
             </li>
 
             <li>
-                <Link href="/books" :class="{'menu-active': $page.url === '/books'}">Books</Link>
+                <Link href="/books" :class="{'menu-active': $page.url.startsWith('/books')}">Books</Link>
             </li>
 
             <li>

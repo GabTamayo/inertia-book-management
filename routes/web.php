@@ -7,3 +7,5 @@ use Inertia\Inertia;
 
 Route::inertia('/', 'Dashboard');
 Route::get('/books', [BookController::class, 'index']);
+
+Route::inertia('/books/create', 'Books/Create');

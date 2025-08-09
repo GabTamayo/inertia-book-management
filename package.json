@@ -17,6 +17,7 @@
     },
     "dependencies": {
         "@inertiajs/vue3": "^2.0.17",
-        "daisyui": "^5.0.50"
+        "daisyui": "^5.0.50",
+        "oh-vue-icons": "^1.0.0-rc3"
     }
 }

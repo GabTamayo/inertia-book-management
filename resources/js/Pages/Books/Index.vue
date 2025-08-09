@@ -1,34 +1,24 @@
 <template>
     <div class="flex justify-between space-x-4 space-y-4">
         <!--  Left Bar -->
+        <div class="grow place-items-center">
+            <div class="drawer lg:drawer-open">
+                <input id="my-drawer-2" type="checkbox" class="drawer-toggle" />
+                <div class="drawer-side">
+                    <label for="my-drawer-2" aria-label="close sidebar" class="drawer-overlay"></label>
+                    <ul class="menu bg-base-200 text-base-content min-h-full w-80 p-4">
+                        <li class="menu-title text-2xl">Fiction</li>
+                        <template v-for="genre in genres['Fiction']" :key="genre.id">
+                            <li><a>{{ genre.genre }}</a></li>
+                        </template>
 
-        <details class="dropdown md:hidden">
-            <summary class="btn m-1">Genres</summary>
-            <ul class="menu dropdown-content bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
-                <li class="menu-title text-xl">Fiction</li>
-                <template v-for="genre in genres['Fiction']" :key="genre.id">
-                    <li><a>{{ genre.genre }}</a></li>
-                </template>
-
-                <li class="menu-title text-xl">Non-Fiction</li>
-                <template v-for="genre in genres['Non-Fiction']" :key="genre.id">
-                    <li><a>{{ genre.genre }}</a></li>
-                </template>
-            </ul>
-        </details>
-
-        <div class="grow place-items-center hidden md:block">
-            <ul class="menu bg-base-200 rounded-box w-48">
-                <li class="menu-title text-2xl">Fiction</li>
-                <template v-for="genre in genres['Fiction']" :key="genre.id">
-                    <li><a>{{ genre.genre }}</a></li>
-                </template>
-
-                <li class="menu-title text-2xl">Non-Fiction</li>
-                <template v-for="genre in genres['Non-Fiction']" :key="genre.id">
-                    <li><a>{{ genre.genre }}</a></li>
-                </template>
-            </ul>
+                        <li class="menu-title text-2xl">Non-Fiction</li>
+                        <template v-for="genre in genres['Non-Fiction']" :key="genre.id">
+                            <li><a>{{ genre.genre }}</a></li>
+                        </template>
+                    </ul>
+                </div>
+            </div>
         </div>
 
         <!--  Center Bar -->
