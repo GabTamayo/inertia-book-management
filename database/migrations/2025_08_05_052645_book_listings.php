@@ -18,7 +18,7 @@ return new class extends Migration
             $table->id();
             $table->string('photo')->nullable();
             $table->string('title');
-            $table->decimal('price', 10, 2);
+            $table->decimal('price', 12, 2);
             $table->string('format');
             $table->date('date_bought');
             $table->integer('num_pages');

@@ -9,12 +9,12 @@
                     <ul class="menu bg-base-200 text-base-content min-h-full w-80 p-4">
                         <li class="menu-title text-2xl">Fiction</li>
                         <template v-for="genre in genres['Fiction']" :key="genre.id">
-                            <li><a>{{ genre.genre }}</a></li>
+                            <li><button @click.prevent="selectGenre(genre.genre)">{{ genre.genre }}</button></li>
                         </template>
 
                         <li class="menu-title text-2xl">Non-Fiction</li>
                         <template v-for="genre in genres['Non-Fiction']" :key="genre.id">
-                            <li><a>{{ genre.genre }}</a></li>
+                            <li><button @click.prevent="selectGenre(genre.genre)">{{ genre.genre }}</button></li>
                         </template>
                     </ul>
                 </div>
@@ -22,7 +22,14 @@
         </div>
 
         <!--  Center Bar -->
-        <div class="grow place-items-center w-full">
+        <div class="grow place-items-center w-full space-y-4">
+            <div class="w-full">
+                <label class="input input-ghost">
+                    <v-icon name="bi-search" />
+                    <input v-model="search" type="search" class="grow" placeholder="Search" />
+                </label>
+            </div>
+
             <ul class="list bg-base-200 rounded-box w-full">
                 <li v-for="book in books.data" :key="book.id" class="list-row">
                     <div>
@@ -38,10 +45,11 @@
                             author.name).join(', ')
                         }}</div>
                         <div class="flex flex-wrap gap-2">
-                            <span v-for="genre in book.genres" :key="genre.id"
-                                class="badge badge-soft badge-xs sm:badge-sm">
+                            <button v-for="genre in book.genres" :key="genre.id"
+                                class="badge badge-soft badge-xs sm:badge-sm cursor-pointer"
+                                @click.prevent="selectGenre(genre.genre)">
                                 {{ genre.genre }}
-                            </span>
+                            </button>
                         </div>
                     </div>
                     <div class="align-items-end">
@@ -50,7 +58,7 @@
                 </li>
             </ul>
 
-            <Pagination :links="books.links" class="my-4" />
+            <Pagination :links="books.links" />
 
         </div>
 
@@ -65,11 +73,27 @@
 </template>
 
 <script setup>
+import { debounce } from 'lodash';
 import Pagination from '../../Shared/Pagination.vue';
+import { ref, watch } from 'vue';
+import { router } from '@inertiajs/vue3';
 
-defineProps({
+let props = defineProps({
     genres: Object,
     books: Object,
+    filters: Object,
 })
 
+let search = ref(props.filters.search);
+
+function selectGenre(genreName) {
+    search.value = genreName;
+}
+
+watch(search, debounce(function (value) {
+    router.get('/books', { search: value }, {
+        preserveState: true,
+        replace: true
+    });
+}, 500));
 </script>

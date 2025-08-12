@@ -2,11 +2,12 @@ import { createApp, h } from 'vue'
 import { createInertiaApp, Link } from '@inertiajs/vue3'
 import '../css/app.css';
 import Layout from './Layout.vue';
+import { Modal, ModalLink, renderApp } from '@inertiaui/modal-vue'
 
 import { OhVueIcon, addIcons } from "oh-vue-icons";
-import { HiMenu } from "oh-vue-icons/icons";
+import { HiMenu, BiSearch, BiPlus } from "oh-vue-icons/icons";
 
-addIcons(HiMenu);
+addIcons(HiMenu, BiSearch, BiPlus);
 
 createInertiaApp({
     progress: {
@@ -25,8 +26,10 @@ createInertiaApp({
         return page
     },
     setup({ el, App, props, plugin }) {
-        createApp({ render: () => h(App, props) })
+        createApp({ render: renderApp(App, props) })
             .use(plugin)
+            .component('Modal', Modal)
+            .component('ModalLink', ModalLink)
             .component("Link", Link)
             .component('v-icon', OhVueIcon)
             .mount(el)

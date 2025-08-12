@@ -30,7 +30,10 @@ it('can attach genre', function () {
     $this->seed(GenreSeeder::class);
     $book = Book::factory()->create();
 
-    $book->addGenres('History');
+    // Get genre id for 'History'
+    $historyGenreId = Genre::where('genre', 'History')->value('id');
+
+    $book->addGenres($historyGenreId);
     $book->load('genres');
 
     expect($book->genres)->toHaveCount(1);
@@ -40,25 +43,36 @@ it('can attach multiple genres', function () {
     $this->seed(GenreSeeder::class);
     $book = Book::factory()->create();
 
-    $book->addGenres(['History', 'Fantasy']);
+    $genreIds = Genre::whereIn('genre', ['History', 'Fantasy'])->pluck('id')->toArray();
+
+    $book->addGenres($genreIds);
     $book->load('genres');
 
     expect($book->genres)->toHaveCount(2);
 });
 
-it('can create book with authors and genres attached', function () {
+it('creates a book with authors and genres', function () {
     $authors = Author::factory()->count(2)->create();
     $this->seed(GenreSeeder::class);
 
-    $book = Book::factory()
-        ->afterCreating(function (Book $book) use ($authors) {
-            $book->addAuthors($authors->pluck('name')->toArray());
-            $book->addGenres(['History']);
-        })
-        ->create();
+    $genres = Genre::where('category', 'Fiction')->take(2)->pluck('id')->toArray();
 
-    $book->load(['authors', 'genres']);
+    $response = $this->post('/books', [
+        'title' => 'Test Book',
+        'authors' => $authors->pluck('name')->toArray(),
+        'num_pages' => 150,
+        'price' => 199.99,
+        'genre_ids' => $genres,
+        'format' => 'Paperback',
+        'date_bought' => '2025-08-12',
+    ]);
 
+    $response->assertRedirect('/books');
+
+    $book = Book::where('title', 'Test Book')->first();
+
+    expect($book)->not()->toBeNull();
+    expect($book->genres)->toHaveCount(2);
     expect($book->authors)->toHaveCount(2);
-    expect($book->genres)->toHaveCount(1);
+    expect($book->authors->pluck('name')->toArray())->toEqualCanonicalizing($authors->pluck('name')->toArray());
 });

@@ -21,7 +21,7 @@
 
                 <div class="navbar-end">
                     <div class="hidden flex-none lg:block">
-                        <Link href="/books/create" class="btn btn-primary rounded-full px-6">Add A book</Link>
+                        <ModalLink href="/books/create" :close-button="false" :close-explicitly="true" class="btn btn-primary rounded-full px-6">Add A book</ModalLink>
                     </div>
                 </div>
             </div>
@@ -36,7 +36,6 @@
 </template>
 
 <script>
-import { Link } from '@inertiajs/vue3';
 import Nav from './Shared/Nav.vue';
 
 export default {

@@ -13,14 +13,20 @@ class Book extends Model
     use HasFactory;
 
     protected $table = 'book_listings';
+
+    protected $fillable = [
+        'title',
+        'num_pages',
+        'price',
+        'format',
+        'date_bought',
+    ];
     protected $hidden = ['created_at', 'updated_at'];
 
-    public function addGenres(string|array $genres)
+    public function addGenres(int|array $genreIds)
     {
-        $genres = Arr::wrap($genres);
-
-        $genreModels = Genre::whereIn('genre', $genres)->get();
-        $this->genres()->syncWithoutDetaching($genreModels);
+        $genreIds = Arr::wrap($genreIds);
+        $this->genres()->syncWithoutDetaching($genreIds);
     }
 
     public function addAuthors(string|array $authors)
