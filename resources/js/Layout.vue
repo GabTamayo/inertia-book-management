@@ -20,9 +20,8 @@
                 </div>
 
                 <div class="navbar-end">
-                    <div class="hidden flex-none lg:block">
-                        <ModalLink href="/books/create" :close-button="false" :close-explicitly="true" class="btn btn-primary rounded-full px-6">Add A book</ModalLink>
-                    </div>
+                    <ModalLink slideover max-width="2xl" href="/books/create" :close-button="false" :close-explicitly="true"
+                        class="btn btn-primary btn-sm sm:btn-md">Add A book</ModalLink>
                 </div>
             </div>
         </header>

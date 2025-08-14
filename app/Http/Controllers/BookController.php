@@ -74,14 +74,19 @@ class BookController extends Controller
 
         $validated_book = $request->validate([
             'title' => ['required', 'string', 'min:3', 'max:46'],
-            'authors' => ['required', 'array', 'min:1'],
+            'authors' => ['required', 'array', 'min:1', 'max:5'],
             'authors.*' => ['string', 'min:3', 'max:46'],
             'num_pages' => ['required', 'integer', 'min:1', 'max:3000'],
             'price' => ['required', 'numeric', 'regex:/^\d{1,10}(\.\d{1,2})?$/'],
-            'genre_ids' => ['required', 'array'],
+            'genre_ids' => ['required', 'array', 'min:1', 'max:3'],
             'format' => ['required', 'string', Rule::in(['Hardcover', 'Paperback', 'Other'])],
-            'date_bought' => ['required', 'date']
+            'date_bought' => ['required', 'date'],
+            'photo' => ['nullable', 'image', 'mimes:png,jpg', 'max:2048']
         ], $messages);
+
+        if ($request->hasFile('photo')) {
+            $validated_book['photo'] = $request->file('photo')->store('book_covers', 'public');
+        }
 
         $book = Book::create($validated_book);
 
@@ -89,5 +94,10 @@ class BookController extends Controller
         $book->addGenres($validated_book['genre_ids']);
 
         return redirect('/books');
+    }
+
+    public function show ()
+    {
+
     }
 }

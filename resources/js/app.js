@@ -3,11 +3,18 @@ import { createInertiaApp, Link } from '@inertiajs/vue3'
 import '../css/app.css';
 import Layout from './Layout.vue';
 import { Modal, ModalLink, renderApp } from '@inertiaui/modal-vue'
+import { putConfig } from '@inertiaui/modal-vue'
 
 import { OhVueIcon, addIcons } from "oh-vue-icons";
-import { HiMenu, BiSearch, BiPlus } from "oh-vue-icons/icons";
+import { HiMenu, BiSearch, BiPlus, HiSun, HiMoon } from "oh-vue-icons/icons";
 
-addIcons(HiMenu, BiSearch, BiPlus);
+addIcons(HiMenu, BiSearch, BiPlus, HiSun, HiMoon);
+
+putConfig({
+    modal: {
+        panelClasses: 'bg-white dark:bg-black/50 backdrop-blur-sm rounded',
+    },
+})
 
 createInertiaApp({
     progress: {

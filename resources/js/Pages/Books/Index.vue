@@ -33,27 +33,27 @@
             <ul class="list bg-base-200 rounded-box w-full">
                 <li v-for="book in books.data" :key="book.id" class="list-row">
                     <div>
-                        <img class="size-14 rounded-box" src="https://img.daisyui.com/images/profile/demo/1@94.webp"
+                        <img class="size-14 rounded-box"
+                            :src="book.photo ? `/storage/${book.photo}` : 'https://img.daisyui.com/images/profile/demo/1@94.webp'"
                             :alt="`Cover of ${book.title}`" />
                     </div>
-                    <div>
-                        <div>
-                            <span class="uppercase">{{ book.title }}</span>
-                            <span class="normal-case"> ({{ book.format }})</span>
-                        </div>
-                        <div class="text-xs font-semibold opacity-60 mb-1">{{book.authors.map(author =>
-                            author.name).join(', ')
-                        }}</div>
-                        <div class="flex flex-wrap gap-2">
+                    <div class="truncate">
+                        <h1 class="uppercase truncate block">{{ book.title }}</h1>
+
+                        <p class="text-xs font-semibold opacity-60 mb-1 capitalize overflow-hidden text-ellipsis">
+                            {{book.authors.map(author =>
+                                author.name).join(', ')
+                            }}</p>
+                        <div class="flex flex-nowrap gap-2 overflow-x-auto hide-scrollbar">
                             <button v-for="genre in book.genres" :key="genre.id"
-                                class="badge badge-soft badge-xs sm:badge-sm cursor-pointer"
+                                class="badge badge-soft badge-sm cursor-pointer"
                                 @click.prevent="selectGenre(genre.genre)">
                                 {{ genre.genre }}
                             </button>
                         </div>
                     </div>
                     <div class="align-items-end">
-                        <a href="#" class="btn btn-primary">View</a>
+                        <ModalLink href="/books/show" max-width="4xl" class="btn btn-primary">View</ModalLink>
                     </div>
                 </li>
             </ul>

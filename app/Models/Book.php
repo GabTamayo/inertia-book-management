@@ -20,6 +20,7 @@ class Book extends Model
         'price',
         'format',
         'date_bought',
+        'photo',
     ];
     protected $hidden = ['created_at', 'updated_at'];
 

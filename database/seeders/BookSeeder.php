@@ -18,7 +18,7 @@ class BookSeeder extends Seeder
         $authors = Author::factory()->count(5)->create();
         $genres = Genre::all();
 
-        Book::factory(100)->create()->each(function ($book) use ($authors, $genres) {
+        Book::factory(200)->create()->each(function ($book) use ($authors, $genres) {
             $randomAuthors = $authors->random(rand(1, 3));
             $book->authors()->attach($randomAuthors);
 

@@ -2,7 +2,7 @@
     <Modal v-slot="{ close }">
         <h1 class="font-bold">Add a Book</h1>
 
-        <form @submit.prevent="submit(close)">
+        <form @submit.prevent="submit(close)" enctype="multipart/form-data">
             <fieldset class="fieldset">
                 <legend class="fieldset-legend">Title</legend>
                 <input type="text" class="input validator w-full" required placeholder="Type here" minlength="3"
@@ -48,7 +48,7 @@
                 <legend class="fieldset-legend">Price</legend>
                 <label class="input validator w-full">
                     <span class="label">Php (₱)</span>
-                    <input type="number" class="grow" required min="0" v-model="form.price" />
+                    <input type="number" class="grow" required min="0" step="0.01" v-model="form.price" />
                 </label>
                 <p class="text-red-400" v-if="form.errors.price">{{ form.errors.price }}</p>
 
@@ -66,7 +66,7 @@
                     <div v-if="selectedCategory === 'fiction'">
                         <fieldset class="fieldset bg-base-100 border-base-300 rounded-box border p-4">
                             <legend class="fieldset-legend">Genre Fiction</legend>
-                            <div class="grid grid-cols-3 gap-2">
+                            <div class="grid grid-cols-2 gap-2">
                                 <label v-for="genre in genres['Fiction']" :key="genre.id" class="label cursor-pointer">
                                     <input type="checkbox" class="checkbox checkbox-sm" :value="genre.id"
                                         v-model="form.genre_ids" />
@@ -78,8 +78,8 @@
 
                     <div v-if="selectedCategory === 'non-fiction'">
                         <fieldset class="fieldset bg-base-100 border-base-300 rounded-box border p-4">
-                            <legend class="fieldset-legend">Genre Fiction</legend>
-                            <div class="grid grid-cols-3 gap-2">
+                            <legend class="fieldset-legend">Genre Non-Fiction</legend>
+                            <div class="grid grid-cols-2 gap-2">
                                 <label v-for="genre in genres['Non-Fiction']" :key="genre.id"
                                     class="label cursor-pointer">
                                     <input type="checkbox" class="checkbox checkbox-sm" :value="genre.id"
@@ -97,7 +97,17 @@
                 <p class="text-red-400" v-if="form.errors.date_bought">{{ form.errors.date_bought }}</p>
 
                 <legend class="fieldset-legend">Upload Book Cover (Optional)</legend>
-                <input type="file" class="file-input w-full" />
+                <input type="file" class="file-input w-full" @change="form.photo = $event.target.files[0]"
+                    accept="image/png, image/jpeg" />
+
+                <progress class="progress progress-primary" v-if="form.progress" :value="form.progress.percentage" max="100">
+                    {{ form.progress.percentage }}%
+                </progress>
+
+                <div v-if="form.photo">
+                    Selected file size: {{ (form.photo.size / 1024).toFixed(2) }} KB
+                </div>
+                <p class="text-red-400" v-if="form.errors.photo">{{ form.errors.photo }}</p>
             </fieldset>
 
             <div class="flex justify-end gap-2">
@@ -128,6 +138,9 @@ const form = useForm({
     genre_ids: [],
     date_bought: '',
     format: '',
+    photo: null,
+}, {
+    forceFormData: true,
 });
 
 function addAuthorInput() {
