@@ -32,17 +32,11 @@ class Book extends Model
 
     public function addAuthors(string|array $authors)
     {
-        $authors = Arr::wrap($authors);
+        $authorIds = collect(Arr::wrap($authors))->map(function ($name) {
+            return Author::firstOrCreate(['name' => $name])->id;
+        });
 
-        $authorModels = collect();
-
-        foreach ($authors as $authorName) {
-            $authorModels->push(
-                Author::firstOrCreate(['name' => $authorName])
-            );
-        }
-
-        $this->authors()->syncWithoutDetaching($authorModels);
+        $this->authors()->syncWithoutDetaching($authorIds);
     }
 
     public function genres(): BelongsToMany

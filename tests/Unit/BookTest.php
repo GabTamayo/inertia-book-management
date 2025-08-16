@@ -3,6 +3,7 @@
 use App\Models\Author;
 use App\Models\Book;
 use App\Models\Genre;
+use App\Models\Category;
 use Database\Seeders\GenreSeeder;
 
 it('can attach an author', function () {
@@ -25,13 +26,12 @@ it('can attach multiple authors', function () {
     expect($book->authors)->toHaveCount(3);
 });
 
-
 it('can attach genre', function () {
     $this->seed(GenreSeeder::class);
     $book = Book::factory()->create();
 
     // Get genre id for 'History'
-    $historyGenreId = Genre::where('genre', 'History')->value('id');
+    $historyGenreId = Genre::where('name', 'History')->value('id');
 
     $book->addGenres($historyGenreId);
     $book->load('genres');
@@ -43,7 +43,7 @@ it('can attach multiple genres', function () {
     $this->seed(GenreSeeder::class);
     $book = Book::factory()->create();
 
-    $genreIds = Genre::whereIn('genre', ['History', 'Fantasy'])->pluck('id')->toArray();
+    $genreIds = Genre::whereIn('name', ['History', 'Fantasy'])->pluck('id')->toArray();
 
     $book->addGenres($genreIds);
     $book->load('genres');
@@ -55,7 +55,9 @@ it('creates a book with authors and genres', function () {
     $authors = Author::factory()->count(2)->create();
     $this->seed(GenreSeeder::class);
 
-    $genres = Genre::where('category', 'Fiction')->take(2)->pluck('id')->toArray();
+    // Get genres under "Fiction"
+    $fictionCategory = Category::where('name', 'Fiction')->first();
+    $genres = $fictionCategory->genres()->take(2)->pluck('id')->toArray();
 
     $response = $this->post('/books', [
         'title' => 'Test Book',
@@ -74,5 +76,6 @@ it('creates a book with authors and genres', function () {
     expect($book)->not()->toBeNull();
     expect($book->genres)->toHaveCount(2);
     expect($book->authors)->toHaveCount(2);
-    expect($book->authors->pluck('name')->toArray())->toEqualCanonicalizing($authors->pluck('name')->toArray());
+    expect($book->authors->pluck('name')->toArray())
+        ->toEqualCanonicalizing($authors->pluck('name')->toArray());
 });

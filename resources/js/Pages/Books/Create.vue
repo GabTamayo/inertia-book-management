@@ -33,7 +33,7 @@
                 </div>
 
                 <legend class="fieldset-legend">Page Number</legend>
-                <input type="number" class="input validator w-full" required min="1" v-model="form.num_pages" />
+                <input type="number" class="input validator w-full" required min="1" max="3000" v-model="form.num_pages" />
                 <p class="text-red-400" v-if="form.errors.num_pages">{{ form.errors.num_pages }}</p>
 
                 <legend class="fieldset-legend">Formats</legend>
@@ -70,7 +70,7 @@
                                 <label v-for="genre in genres['Fiction']" :key="genre.id" class="label cursor-pointer">
                                     <input type="checkbox" class="checkbox checkbox-sm" :value="genre.id"
                                         v-model="form.genre_ids" />
-                                    {{ genre.genre }}
+                                    {{ genre.name }}
                                 </label>
                             </div>
                         </fieldset>
@@ -84,7 +84,7 @@
                                     class="label cursor-pointer">
                                     <input type="checkbox" class="checkbox checkbox-sm" :value="genre.id"
                                         v-model="form.genre_ids" />
-                                    {{ genre.genre }}
+                                    {{ genre.name }}
                                 </label>
                             </div>
                         </fieldset>

@@ -9,12 +9,12 @@
                     <ul class="menu bg-base-200 text-base-content min-h-full w-80 p-4">
                         <li class="menu-title text-2xl">Fiction</li>
                         <template v-for="genre in genres['Fiction']" :key="genre.id">
-                            <li><button @click.prevent="selectGenre(genre.genre)">{{ genre.genre }}</button></li>
+                            <li><button @click.prevent="selectGenre(genre.name)">{{ genre.name }}</button></li>
                         </template>
 
                         <li class="menu-title text-2xl">Non-Fiction</li>
                         <template v-for="genre in genres['Non-Fiction']" :key="genre.id">
-                            <li><button @click.prevent="selectGenre(genre.genre)">{{ genre.genre }}</button></li>
+                            <li><button @click.prevent="selectGenre(genre.name)">{{ genre.name }}</button></li>
                         </template>
                     </ul>
                 </div>
@@ -47,8 +47,8 @@
                         <div class="flex flex-nowrap gap-2 overflow-x-auto hide-scrollbar">
                             <button v-for="genre in book.genres" :key="genre.id"
                                 class="badge badge-soft badge-sm cursor-pointer"
-                                @click.prevent="selectGenre(genre.genre)">
-                                {{ genre.genre }}
+                                @click.prevent="selectGenre(genre.name)">
+                                {{ genre.name }}
                             </button>
                         </div>
                     </div>

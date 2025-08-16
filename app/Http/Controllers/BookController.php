@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Author;
 use App\Models\Book;
+use App\Models\Category;
 use App\Models\Genre;
+use App\Rules\SameCategory;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
@@ -14,24 +16,25 @@ class BookController extends Controller
     public function index(Request $request)
     {
         //Genre Sidebar Display
-        $grouped_genres = Genre::all()
-            ->groupBy('category')
-            ->map(function ($group) {
-                return $group->map(fn($genre) => [
-                    'id' => $genre->id,
-                    'genre' => $genre->genre,
-                ]);
+        $grouped_genres = Category::with('genres')->get()
+            ->mapWithKeys(function ($category) {
+                return [
+                    $category->name => $category->genres->map(fn($genre) => [
+                        'id' => $genre->id,
+                        'name' => $genre->name,
+                    ])
+                ];
             });
 
-        $books = Book::with(['authors', 'genres'])
+        $books = Book::with(['authors', 'genres.category'])
             ->when($request->input('search'), function ($query, $search) {
-                $query->where('title', 'like', '%' . $search . '%')
-                    ->orWhereHas('authors', function ($q) use ($search) {
-                        $q->where('name', 'like', '%' . $search . '%');
-                    })
-                    ->orWhereHas('genres', function ($q) use ($search) {
-                        $q->where('genre', 'like', '%' . $search . '%');
-                    });
+                $query->where('title', 'like', "%{$search}%")
+                    ->orWhereHas('authors', fn($q) => $q->where('name', 'like', "%{$search}%"))
+                    ->orWhereHas(
+                        'genres',
+                        fn($q) => $q->where('name', 'like', "%{$search}%")
+                            ->orWhereHas('category', fn($q2) => $q2->where('name', 'like', "%{$search}%"))
+                    );
             })
             ->latest()
             ->paginate(10)
@@ -51,14 +54,13 @@ class BookController extends Controller
             'name' => $author->name,
         ]);
 
-        $grouped_genres = Genre::all()
-            ->groupBy('category')
-            ->map(function ($group) {
-                return $group->map(fn($genre) => [
+        $grouped_genres = Category::with('genres')->get()
+            ->mapWithKeys(fn($category) => [
+                $category->name => $category->genres->map(fn($genre) => [
                     'id' => $genre->id,
-                    'genre' => $genre->genre,
-                ]);
-            });
+                    'name' => $genre->name,
+                ])
+            ]);
 
         return Inertia::render('Books/Create', [
             'authors' => $authors,
@@ -78,7 +80,8 @@ class BookController extends Controller
             'authors.*' => ['string', 'min:3', 'max:46'],
             'num_pages' => ['required', 'integer', 'min:1', 'max:3000'],
             'price' => ['required', 'numeric', 'regex:/^\d{1,10}(\.\d{1,2})?$/'],
-            'genre_ids' => ['required', 'array', 'min:1', 'max:3'],
+            'genre_ids' => ['required', 'array', 'min:1', 'max:3', new SameCategory()],
+            'genre_ids.*' => ['integer', 'exists:genres,id'],
             'format' => ['required', 'string', Rule::in(['Hardcover', 'Paperback', 'Other'])],
             'date_bought' => ['required', 'date'],
             'photo' => ['nullable', 'image', 'mimes:png,jpg', 'max:2048']
@@ -96,8 +99,5 @@ class BookController extends Controller
         return redirect('/books');
     }
 
-    public function show ()
-    {
-
-    }
+    public function show() {}
 }
